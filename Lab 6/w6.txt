@@ -1,0 +1,178 @@
+Script started on Tue 23 Jun 2015 09:08:25 PM EDT
+xclee@matrix:~/oopWorkShop6> whoami
+xclee
+xclee@matrix:~/oopWorkShop6> cat FlyingPoints.cpp FlyingPoints.h FlyingPoints [K[K[K[K[K[K[K[K[K[K[K[K[Kw6.cpp
+//FlyingPoints.cpp
+
+#include <iostream>
+#include "FlyingPoints.h"
+using namespace std;
+
+FlyingPoints::FlyingPoints(){
+ in=0;
+ out=0;
+}
+
+FlyingPoints::FlyingPoints(int i, int o){
+ in=i;
+ out=o;
+}
+
+void FlyingPoints::updateBalance(){
+
+	if(in > out)
+	{
+	in-=out;
+	out=0;
+	}
+	else 
+	{
+	out-=in;
+	in=0;
+	}
+}
+
+void FlyingPoints::display() const {
+ cout << in << " points available to fly." << endl << out << " points available to spent." << endl;
+}
+
+FlyingPoints& FlyingPoints::operator +=(const FlyingPoints& f) {
+ in= in + f.in;
+ out= out + f.out;
+ updateBalance();
+ return *this;
+}
+
+FlyingPoints operator +(const FlyingPoints& lhs, const FlyingPoints& rhs) {
+ FlyingPoints result= lhs; 
+ result += rhs;
+ return result;
+}
+
+bool operator == (const FlyingPoints& lhs, const FlyingPoints& rhs) {
+ 	
+	FlyingPoints leftHS=lhs;
+	FlyingPoints rightHS=rhs;
+
+	leftHS.updateBalance();
+	rightHS.updateBalance();
+
+   if (leftHS.in==rightHS.in && leftHS.out==rightHS.out)
+
+	return true;
+	else 
+	return false;
+}	
+
+
+//FlyingPoints.h
+
+class FlyingPoints{
+int in, out;
+void updateBalance();
+
+public:
+FlyingPoints();
+FlyingPoints(int, int);
+void display() const;
+FlyingPoints& operator +=(const FlyingPoints&);
+friend bool operator == (const FlyingPoints&, const FlyingPoints&);
+};
+
+FlyingPoints operator +(const FlyingPoints&, const FlyingPoints&);
+#include <iostream>
+#include "FlyingPoints.h"
+
+using namespace std;
+
+void read(const char* msg, FlyingPoints& f)
+{
+	int inPoints, outPoints;
+	cout << "Enter " << msg << endl;
+	cout << "Enter number of incoming flying points: ";
+	cin >> inPoints;
+	cout << "Enter number of spent flying points: ";
+	cin >> outPoints;
+	f = FlyingPoints(inPoints, outPoints);
+}
+
+int main()
+{
+	FlyingPoints left, right, result, ref;
+
+	cout << "Flying Points Calculator\n";
+	cout << "========================\n";
+
+	read("Left Operand...", left);
+	read("Right Operand...", right);
+
+	cout << "Result: " << endl;
+	left.display();
+	cout << " + ";
+	right.display();
+	cout << " = ";
+	result = left + right;
+	result.display();
+	cout << endl;
+
+	read("2nd Right Operand...", right);
+
+	cout << "Result: " << endl;
+	result.display();
+	cout << " += ";
+	right.display();
+	cout << " => ";
+	result += right;
+	result.display();
+	cout << endl;
+
+	read("Reference...", ref);
+	if(result == ref)
+    {
+		cout << "Result == Reference" << endl;
+    }
+	else
+    {
+		cout << "Result != Reference" << endl;
+    }
+    
+    return 0;
+}
+
+xclee@matrix:~/oopWorkShop6> cat FlyingPoints.cpp FlyingPoints.h w6.cpp[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cwhoami[Kvim FlyingPoints.cppw6[Kg++ -o w6 FlyingPoints.cpp w6.cpp
+xclee@matrix:~/oopWorkShop6> w6
+Flying Points Calculator
+========================
+Enter Left Operand...
+Enter number of incoming flying points: 1000
+Enter number of spent flying points: 600
+Enter Right Operand...
+Enter number of incoming flying points: 100
+Enter number of spent flying points: 300
+Result: 
+1000 points available to fly.
+600 points available to spent.
+ + 100 points available to fly.
+300 points available to spent.
+ = 200 points available to fly.
+0 points available to spent.
+
+Enter 2nd Right Operand...
+Enter number of incoming flying points: 500
+Enter number of spent flying points: 600
+Result: 
+200 points available to fly.
+0 points available to spent.
+ += 500 points available to fly.
+600 points available to spent.
+ => 100 points available to fly.
+0 points available to spent.
+
+Enter Reference...
+Enter number of incoming flying points: 1100
+Enter number of spent flying points: 1000
+Result == Reference
+xclee@matrix:~/oopWorkShop6> exit
+exit
+
+Script done on Tue 23 Jun 2015 09:10:27 PM EDT
